@@ -20,6 +20,9 @@
         var cv = document.getElementById('mycanvas');
         var ctx = cv.getContext('2d');
         var r=0, g=0, b=0;
+        var figure="square";
+        var pencil=false;
+        var super_X=0, super_Y=0;
         /*
         //cuadrados
         ctx.fillStyle="rgb(200,0,0)";
@@ -72,19 +75,68 @@
         ctx.moveTo(100, 200);
         ctx.drawImage(img, 0, 0, 300, 300);
         */
-        cv.addEventListener('click',function (e){
-            //console.log(e);
-            ctx.beginPath();
-            ctx.fillStyle=`rgb(${r}, ${g}, ${b}, 0.5)`;
-            ctx.arc(e.offsetX, e.offsetY, 50, 0, 2 * Math.PI);
-            ctx.fill();
-            ctx.stroke();     
-        });
-        cv.addEventListener('mouseover', (e)=>{
+        function generateRandomColor(){
             r=Math.floor(Math.random()*254);
             g=Math.floor(Math.random()*254);
-            b=Math.floor(Math.random()*254);
-        });
+            b=Math.floor(Math.random()*254);}
+        function generateRandomFigure(){
+            figure=(figure=="square")?"circle":"square";}
+        function paint(){
+            ctx.strokeRect(super_X, super_Y, 20, 20);
+            ctx.fillStyle=`rgb(${r}, ${g}, ${b}, 0.5)`;
+            ctx.fillRect(super_X, super_Y, 20, 20);
+        }
+        function unPaint(){
+            ctx.strokeStyle="white";
+            ctx.strokeRect(super_X, super_Y, 20, 20);
+            ctx.fillStyle="white";
+            ctx.fillRect(super_X, super_Y, 20, 20);
+        }
+        cv.addEventListener('click',function (e){
+            if (figure=="square") {
+                ctx.strokeRect(e.offsetX-25, e.offsetY-25, 55, 50);
+                ctx.fillStyle=`rgb(${r}, ${g}, ${b}, 0.5)`;
+                ctx.fillRect(e.offsetX-25, e.offsetY-25, 55, 50);
+            } else {
+                ctx.beginPath();
+                ctx.fillStyle=`rgb(${r}, ${g}, ${b}, 0.5)`;
+                ctx.arc(e.offsetX, e.offsetY, 50, 0, 2 * Math.PI);
+                ctx.fill();
+                ctx.stroke();
+            }});
+        cv.addEventListener('mouseover', (e)=>{generateRandomColor()});
+        cv.addEventListener('mouseout', (e)=>{generateRandomFigure();});
+        cv.addEventListener('mousemove', (e)=>{
+            if(pencil){
+                ctx.fillStyle=`black`;
+                ctx.fillRect(e.offsetX, e.offsetY, 5, 5);
+            }});
+        cv.addEventListener('mousedown', (e)=>{
+            pencil=true;});
+        cv.addEventListener('mouseup', (e)=>{
+            pencil=false;});
+        document.addEventListener('keydown', (e)=>{
+            //console.log(e.keyCode);
+            unPaint();
+            generateRandomColor();
+            //left
+            if (e.keyCode == 65 || e.keyCode == 37) {
+                super_X-=20;
+            }
+            //down
+            if (e.keyCode == 83 || e.keyCode == 40) {
+                super_Y+=20;
+            }
+            //right
+            if (e.keyCode == 68 || e.keyCode == 39) {
+                super_X+=20;
+            }
+            //up
+            if (e.keyCode == 87 || e.keyCode == 38) {
+                super_Y-=20;
+            }
+            paint();
+        })
     </script>
 </body>
 </html>
