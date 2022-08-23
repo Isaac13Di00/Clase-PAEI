@@ -16,36 +16,103 @@
         Hola soy un canvas
     </canvas>
     <script type="text/javascript">
-        var cv, ctx, super_X=0, super_Y=0;
-        var r=0, g=0, b=0;
-        function generateRandomColor(){
-            r=Math.floor(Math.random()*254);
-            g=Math.floor(Math.random()*254);
-            b=Math.floor(Math.random()*254);
-        }
-        function run(){
-            cv = document.getElementById('mycanvas');
-            ctx = cv.getContext('2d');
-            paint();
-        }
+        var cv, ctx, player1, player2, direccion="", velocidad=5, score=0;
         function generateRandomColor(){
             r=Math.floor(Math.random()*254);
             g=Math.floor(Math.random()*254);
             b=Math.floor(Math.random()*254);}
+        function run(){
+            cv = document.getElementById('mycanvas');
+            ctx = cv.getContext('2d');
+            player1 = new Cuadro(0, 0, 40, 40, "red");
+            player2 = new Cuadro(40 , 40, 40, 40, "brown");
+            paint();}
         function paint(){
-            generateRandomColor();
-            unPaint();
             window.requestAnimationFrame(paint);
-            super_X+=2;
-            ctx.strokeRect(super_X, super_Y, 40, 40);
-            ctx.fillStyle=`rgb(${r}, ${g}, ${b}, 0.5)`;
-            ctx.fillRect(super_X, super_Y, 40, 40);
+            player1.unPaint(ctx);
+            player1.paint(ctx);
+            player2.paint(ctx);
+            ctx.fillStyle = "black";
+            ctx.fillText("SCORE:"+score,100,110);
+            update();
         }
-        function unPaint(){
-            ctx.strokeStyle="white";
-            ctx.strokeRect(super_X, super_Y, 40, 40);
-            ctx.fillStyle="white";
-            ctx.fillRect(super_X, super_Y, 40, 40);
+        function update(){
+            if(player1.se_tocan(player2)){
+                velocidad+=2;
+                score+=5;
+            };
+            if(player1.x > 500){
+                player1.x = 0;
+            }
+            if(player1.x < -1){
+                player1.x = 500;
+            }
+            if(player1.y > 500){
+                player1.y = 0;
+            }
+            if(player1.y < 0){
+                player1.y = 500;
+            }
+            if(direccion=="right"){
+                player1.x+=velocidad;
+            }
+            if(direccion=="left"){
+                player1.x-=velocidad;
+            }
+            if(direccion=="down"){
+                player1.y+=velocidad;
+            }
+            if(direccion=="up"){
+                player1.y-=velocidad;
+            }            
+        }
+        document.addEventListener('keydown', (e)=>{
+            if (e.keyCode == 65 || e.keyCode == 37) {
+                direccion = "left";
+            }
+            //down
+            if (e.keyCode == 83 || e.keyCode == 40) {
+                direccion = "down";
+            }
+            //right
+            if (e.keyCode == 68 || e.keyCode == 39) {
+                direccion = "right";
+            }
+            //up
+            if (e.keyCode == 87 || e.keyCode == 38) {
+                direccion = "up";
+            }
+        });
+        window.requestAnimationFrame = (function () {
+            return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            function (callback) {
+                window.setTimeout(callback, 17);
+            };}());
+        window.addEventListener("load", run, false);
+        function Cuadro(x, y, w, h, c){
+            this.x = x;this.y = y;
+            this.w = w;this.h = h;
+            this.c = c;
+            this.paint = function(ctx){
+                ctx.strokeRect(this.x, this.y, this.w, this.h);
+                ctx.fillStyle=this.c;
+                ctx.fillRect(this.x, this.y, this.w, this.h);};
+            this.unPaint = function(ctx){
+                ctx.fillStyle="white";
+                ctx.fillRect(0, 0, 500, 500);
+            }
+            this.se_tocan = function (target) { 
+                if(this.x < target.x + target.w &&
+                    this.x + this.w > target.x && 
+                    this.y < target.y + target.h && 
+                    this.y + this.h > target.y){
+                        target.x = Math.floor(Math.random()*459);
+                        target.y = Math.floor(Math.random()*459);
+                        return true;
+                    }
+                };
         }
         /*document.addEventListener('keydown', (e)=>{
             //console.log(e.keyCode);
@@ -67,15 +134,6 @@
                 super_Y-=20;
             }
             paint();})*/
-
-        window.requestAnimationFrame = (function () {
-            return window.requestAnimationFrame ||
-            window.webkitRequestAnimationFrame ||
-            window.mozRequestAnimationFrame ||
-            function (callback) {
-                window.setTimeout(callback, 17);
-            };}());
-        window.addEventListener("load", run, false);
     </script>
 </body>
 </html>
