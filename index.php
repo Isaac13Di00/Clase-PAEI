@@ -12,113 +12,150 @@
    </style>
 </head>
 <body>
-    <canvas id="mycanvas" width="1000" height="1000">
+    <canvas id="mycanvas" width="500" height="500">
         Hola soy un canvas
     </canvas>
-    <img src="imagen.jpg" id="img" style="display: none">
     <script type="text/javascript">
-        var cv = document.getElementById('mycanvas');
-        var ctx = cv.getContext('2d');
-        var r=0, g=0, b=0;
-        var figure="square";
-        var pencil=false;
-        var super_X=0, super_Y=0;
-        /*
-        //cuadrados
-        ctx.fillStyle="rgb(200,0,0)";
-        ctx.fillRect(10,10,55,50);
-        ctx.fillStyle="rgb(0,200,0,0.5)";
-        ctx.fillRect(30,30,55,50);
-        ctx.fillStyle="rgb(0,0,200)";
-        ctx.fillRect(50,50,55,50);
-        //linea
-        ctx.moveTo(80, 0);
-        ctx.lineTo(200, 200);
-        ctx.stroke();
-        //triangulos
-        ctx.moveTo(250,250);
-        ctx.lineTo(350, 300);
-        ctx.lineTo(350, 400);
-        ctx.lineTo(250, 250);
-        ctx.fillStyle="rgb(100,100,0)";
-        ctx.fill()
-        ctx.stroke();
-        //circulo
-        ctx.beginPath();
-        ctx.arc(70, 350, 50, 0, 2 * Math.PI);
-        ctx.stroke();
-        ctx.beginPath();
-        ctx.arc(180, 350, 50, 0, 2 * Math.PI);
-        ctx.fillStyle="rgb(80,10,0)";
-        ctx.fill();
-        ctx.stroke();
-        //lineas
-        ctx.font = "30px Arial";
-        ctx.fillText("Isaac Pérez", 200, 30);
-        ctx.strokeText("Isaac Pérez", 200, 60);
-        //gradiante
-        var grd=ctx.createLinearGradient(200, 80, 400, 80);
-        grd.addColorStop(0, 'red');
-        grd.addColorStop(0.3, 'yellow');
-        grd.addColorStop(0.6, 'cyan');
-        grd.addColorStop(1, 'purple');
-        ctx.fillStyle=grd;
-        ctx.fillRect(200,80,200,80);
-        //radianl gradient
-        grd=ctx.createRadialGradient(60, 200, 200, 120, 210, 30);
-        grd.addColorStop(0, 'red');
-        grd.addColorStop(1, 'white');
-        ctx.fillStyle=grd;
-        ctx.fillRect(10,170,200,100);
-        //imagenes
-        var img=document.getElementById("img");
-        ctx.moveTo(100, 200);
-        ctx.drawImage(img, 0, 0, 300, 300);
-        */
+        var cv, ctx, player1, player2, direccion="", velocidad=5, score=0, pause=false;
         function generateRandomColor(){
             r=Math.floor(Math.random()*254);
             g=Math.floor(Math.random()*254);
             b=Math.floor(Math.random()*254);}
-        function generateRandomFigure(){
-            figure=(figure=="square")?"circle":"square";}
+        function run(){
+            cv = document.getElementById('mycanvas');
+            ctx = cv.getContext('2d');
+            player1 = new Cuadro(0, 0, 40, 40, "red");
+            player2 = new Cuadro(40 , 40, 40, 40, "brown");
+            pared = [new Cuadro(20,80,20,100,"gray"), new Cuadro(350,200,20,100,"gray"), new Cuadro(200,400,90,100,"gray")]
+            paint();}
         function paint(){
-            ctx.strokeRect(super_X, super_Y, 20, 20);
-            ctx.fillStyle=`rgb(${r}, ${g}, ${b}, 0.5)`;
-            ctx.fillRect(super_X, super_Y, 20, 20);
+            window.requestAnimationFrame(paint);
+            player1.unPaint(ctx);
+            player1.paint(ctx);
+            player2.paint(ctx);
+            for (let index = 0; index < pared.length; index++) {
+                pared[index].paint(ctx);
+            }
+            ctx.fillStyle = "black";
+            ctx.fillText("SCORE: "+score,440,10);
+            if(pause){
+                ctx.fillStyle = "rgba(0,0,0,0.5)";
+                ctx.fillRect(0,0,500,500);
+                ctx.fillStyle = "white";
+                ctx.fillText("Pause",245,250);
+            }else{
+                update();
+            }            
         }
-        function unPaint(){
-            ctx.strokeStyle="white";
-            ctx.strokeRect(super_X, super_Y, 20, 20);
-            ctx.fillStyle="white";
-            ctx.fillRect(super_X, super_Y, 20, 20);
+        function update(){
+            if(player1.se_tocan(player2)){
+                velocidad+=2;
+                score+=5;
+            };
+            if(player1.x > 500){
+                player1.x = 0;
+            }
+            if(player1.x < -1){
+                player1.x = 500;
+            }
+            if(player1.y > 500){
+                player1.y = 0;
+            }
+            if(player1.y < 0){
+                player1.y = 500;
+            }
+            if(direccion=="right"){
+                player1.x+=velocidad;
+            }
+            if(direccion=="left"){
+                player1.x-=velocidad;
+            }
+            if(direccion=="down"){
+                player1.y+=velocidad;
+            }
+            if(direccion=="up"){
+                player1.y-=velocidad;
+            }
+            if(player1.chocan(pared[0]) || player1.chocan(pared[1]) || player1.chocan(pared[2])){
+                if(direccion=="right"){
+                player1.x-=velocidad;
+                }
+                if(direccion=="left"){
+                    player1.x+=velocidad;
+                }
+                if(direccion=="down"){
+                    player1.y-=velocidad;
+                }
+                if(direccion=="up"){
+                    player1.y+=velocidad;
+                }
+            }
+            
         }
-        cv.addEventListener('click',function (e){
-            if (figure=="square") {
-                ctx.strokeRect(e.offsetX-25, e.offsetY-25, 55, 50);
-                ctx.fillStyle=`rgb(${r}, ${g}, ${b}, 0.5)`;
-                ctx.fillRect(e.offsetX-25, e.offsetY-25, 55, 50);
-            } else {
-                ctx.beginPath();
-                ctx.fillStyle=`rgb(${r}, ${g}, ${b}, 0.5)`;
-                ctx.arc(e.offsetX, e.offsetY, 50, 0, 2 * Math.PI);
-                ctx.fill();
-                ctx.stroke();
-            }});
-        cv.addEventListener('mouseover', (e)=>{generateRandomColor()});
-        cv.addEventListener('mouseout', (e)=>{generateRandomFigure();});
-        cv.addEventListener('mousemove', (e)=>{
-            if(pencil){
-                ctx.fillStyle=`black`;
-                ctx.fillRect(e.offsetX, e.offsetY, 5, 5);
-            }});
-        cv.addEventListener('mousedown', (e)=>{
-            pencil=true;});
-        cv.addEventListener('mouseup', (e)=>{
-            pencil=false;});
         document.addEventListener('keydown', (e)=>{
+            if (e.keyCode == 65 || e.keyCode == 37) {
+                direccion = "left";
+            }
+            //down
+            if (e.keyCode == 83 || e.keyCode == 40) {
+                direccion = "down";
+            }
+            //right
+            if (e.keyCode == 68 || e.keyCode == 39) {
+                direccion = "right";
+            }
+            //up
+            if (e.keyCode == 87 || e.keyCode == 38) {
+                direccion = "up";
+            }
+            //pause
+            if(e.keyCode == 32){
+                pause = (!pause)?true:false;
+            }
+        });
+        window.requestAnimationFrame = (function () {
+            return window.requestAnimationFrame ||
+            window.webkitRequestAnimationFrame ||
+            window.mozRequestAnimationFrame ||
+            function (callback) {
+                window.setTimeout(callback, 17);
+            };}());
+        window.addEventListener("load", run, false);
+
+        function Cuadro(x, y, w, h, c){
+            this.x = x;this.y = y;
+            this.w = w;this.h = h;
+            this.c = c;
+            this.paint = function(ctx){
+                ctx.strokeRect(this.x, this.y, this.w, this.h);
+                ctx.fillStyle=this.c;
+                ctx.fillRect(this.x, this.y, this.w, this.h);};
+            this.unPaint = function(ctx){
+                ctx.fillStyle="white";
+                ctx.fillRect(0, 0, 500, 500);
+            }
+            this.se_tocan = function (target) { 
+                if(this.x < target.x + target.w &&
+                    this.x + this.w > target.x && 
+                    this.y < target.y + target.h && 
+                    this.y + this.h > target.y){
+                        target.x = Math.floor(Math.random()*459);
+                        target.y = Math.floor(Math.random()*459);
+                        return true;
+                    }
+                };
+            this.chocan = function (target) { 
+                if(this.x < target.x + target.w &&
+                    this.x + this.w > target.x && 
+                    this.y < target.y + target.h && 
+                    this.y + this.h > target.y){
+                        return true;
+                    }
+                };
+        }
+        /*document.addEventListener('keydown', (e)=>{
             //console.log(e.keyCode);
             unPaint();
-            generateRandomColor();
             //left
             if (e.keyCode == 65 || e.keyCode == 37) {
                 super_X-=20;
@@ -135,8 +172,7 @@
             if (e.keyCode == 87 || e.keyCode == 38) {
                 super_Y-=20;
             }
-            paint();
-        })
+            paint();})*/
     </script>
 </body>
 </html>
