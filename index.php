@@ -17,24 +17,38 @@
     </canvas>
     <script type="text/javascript">
         var cv, ctx, player1, player2, direccion="", velocidad=5, score=0, pause=false;
+        var carro = new Image();
+        var aceite = new Image();
+        var poste = new Image();
+        var sonido = new Audio();
         function generateRandomColor(){
             r=Math.floor(Math.random()*254);
             g=Math.floor(Math.random()*254);
             b=Math.floor(Math.random()*254);}
+        function unPaint(){
+            ctx.fillStyle="white";
+            ctx.fillRect(0, 0, 500, 500);}
         function run(){
             cv = document.getElementById('mycanvas');
             ctx = cv.getContext('2d');
             player1 = new Cuadro(0, 0, 40, 40, "red");
             player2 = new Cuadro(40 , 40, 40, 40, "brown");
-            pared = [new Cuadro(20,80,20,100,"gray"), new Cuadro(350,200,20,100,"gray"), new Cuadro(200,400,90,100,"gray")]
+            pared = [new Cuadro(20,80,20,100,"gray"), new Cuadro(350,200,20,100,"gray"), new Cuadro(200,400,20,100,"gray")]
+            carro.src = 'carrito.png';
+            aceite.src = 'aceite.png';
+            poste.src = 'poste.png';
+            sonido.src = 'sonido.mp3';
             paint();}
         function paint(){
             window.requestAnimationFrame(paint);
-            player1.unPaint(ctx);
-            player1.paint(ctx);
-            player2.paint(ctx);
+            unPaint();
+            ctx.drawImage(carro, player1.x, player1.y);
+            ctx.drawImage(aceite, player2.x, player2.y);
+            
+            //player1.paint(ctx);
+            //player2.paint(ctx);
             for (let index = 0; index < pared.length; index++) {
-                pared[index].paint(ctx);
+                ctx.drawImage(poste, pared[index].x, pared[index].y);
             }
             ctx.fillStyle = "black";
             ctx.fillText("SCORE: "+score,440,10);
@@ -51,6 +65,7 @@
             if(player1.se_tocan(player2)){
                 velocidad+=2;
                 score+=5;
+                sonido.play();
             };
             if(player1.x > 500){
                 player1.x = 0;
@@ -130,10 +145,6 @@
                 ctx.strokeRect(this.x, this.y, this.w, this.h);
                 ctx.fillStyle=this.c;
                 ctx.fillRect(this.x, this.y, this.w, this.h);};
-            this.unPaint = function(ctx){
-                ctx.fillStyle="white";
-                ctx.fillRect(0, 0, 500, 500);
-            }
             this.se_tocan = function (target) { 
                 if(this.x < target.x + target.w &&
                     this.x + this.w > target.x && 
