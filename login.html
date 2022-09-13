@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Movies</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/5.0.0/mdb.min.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://unpkg.com/vue@3"></script>
+</head>
+<body>
+  <div id="contenedor">
+    <div class="row">
+      <div v-for="(item, index) in info" class="col-2">
+        <section style="background-color: #eee;">
+          <div class="text-center container py-1">
+            <div class="card">
+              <div class="bg-image hover-zoom ripple ripple-surface ripple-surface-light" data-mdb-ripple-color="light">
+              <img v-bind:src="'https://image.tmdb.org/t/p/w300/'+item.poster_path" class="w-100" />
+              <a @click="saveMovie(index)" href="descript.html">
+                <div class="hover-overlay">
+                  <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                </div>
+              </a>
+              <div class="card-body">
+                <h5 class="card-title mb-3">{{ item.title }}</h5>
+                <p>Rating {{ item.vote_average }}</p>
+                <h6 class="mb-3">Release date {{ item.release_date }}</h6>
+              </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+    const { createApp } = Vue
+    const app = createApp({
+        data(){
+            return{
+              info: '',
+            }
+        },
+        methods: {
+          saveMovie(x){
+            localStorage.setItem('movie', x)
+          }
+        },
+        mounted(){
+          //var axios = require('axios');
+          var config = {
+            method: 'get',
+            url: 'https://api.themoviedb.org/3/movie/popular?language=en-US',
+            headers: { 
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMDM4OGI2NzU3Y2E2MzYzODQ4YWE3YmY1OGEzYzZjYiIsInN1YiI6IjYzMWU2OTBjYzhmM2M0MDA3ZjZjMDFjMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._PXoXAgWp43cSCc9cQGfF9SKbk5Wmu5VfvRyVXyPSG0'
+            }
+          };
+          var self = this;
+          axios(config)
+          .then(function (response) {
+            self.info = response.data.results;
+            console.log("Data assigned")
+            //console.log(JSON.stringify(response.data));
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+
+        },
+    }).mount('#contenedor')
+</script>
+</html>

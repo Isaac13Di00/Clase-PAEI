@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primer archivo Vue.js</title>
+</head>
+<body>
+    <div id="contenedor">
+        <label >Username: </label>
+        <input type="text" v-model="email">
+        <br>
+        <label >Password: </label>
+        <input type="text" v-model="password">
+        <button @click="login">Push</button>
+    </div>
+</body>
+<script src="https://unpkg.com/vue@3"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+    const { createApp } = Vue;0
+    const app = createApp({
+        data(){
+            return{
+                email: null,
+                password: null,
+                users: null
+            }
+        },
+        methods: {
+            login(e){
+                //var axios = require('axios');
+                //var FormData = require('form-data');
+                var data = new FormData();
+                data.append('username', this.email);//IsaacPerezC
+                data.append('password', this.password);//paqueledes
+                data.append('request_token', '');
+                var config = {
+                method: 'post',
+                url: 'https://api.themoviedb.org/3/authentication/token/validate_with_login?api_key=e0388b6757ca6363848aa7bf58a3c6cb',
+                headers: { 
+                    //...data.getHeaders()
+                },
+                data : data
+                };
+                axios(config)
+                .then(function (response) {
+                    if (response.data.success) {
+                        var tmp_usr={
+                            name: this.email
+                        }
+                        console.log(this.email)
+                        alert("asd");
+                        localStorage.setItem('user', JSON.stringify(tmp_usr))
+                        alert("Ingresado")
+                        window.location.href="login.html"
+                    }
+                    console.log(JSON.stringify(response.data));
+                })
+                .catch(function (error) {
+                    alert("Datos incorrectos")
+                    console.log(error);
+                });
+            }
+        },
+        mounted(){
+                const fetchData = async () =>{
+                    try {
+                        const resp = await fetch('users.json')
+                        const result = await resp.json()
+                        this.users =await result
+                        return await result
+                        
+                    } catch (error) {
+                        console.warn(error)
+                    }
+                }
+                fetchData()
+            },
+    }).mount('#contenedor')
+</script>
+</html>

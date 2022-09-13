@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" rel="stylesheet"/>
+  <script src="https://unpkg.com/vue@3"></script>
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+  <title>Document</title>
+</head>
+<body>
+  <div id="contenedor">
+    <div class="container py-4 my-4 mx-auto d-flex flex-column">
+      <div class="header">
+          <div class="row r1">
+              <div class="col-md-9 abc">
+                  <h1>{{ movie.title }}</h1>
+              </div>
+          </div>
+      </div>
+      <div class="container-body mt-4">
+          <div class="row r3">
+              <div class="col-md-5 p-0 klo">
+                <br><br>
+                  <ul style="font-size: 20px;">
+                      <li>Original lenguage: {{ movie.original_language }}</li>
+                      <li>Original title: {{ movie.original_title }}</li>
+                      <li>Popularity: {{ movie.popularity }} views</li>
+                      <li>Release date: {{ movie.release_date }}</li>
+                  </ul>
+              </div>
+              <div class="col-md-7"> <img v-bind:src="'https://image.tmdb.org/t/p/w300/'+movie.poster_path"> </div>
+          </div>
+      </div>
+      <div class="footer d-flex flex-column mt-4">
+        <div class="row r2">
+          <div class="col-md-2"><button @click="turnOnDescrip" type="button" class="btn btn-outline-warning">Description</button></div>
+          <!-- <div class="col-md-2"><button @click="turnOnDescrip" type="button" class="btn btn-outline-warning">Description</button></div> -->
+          <div class="col-md-2 mio offset-md-7"><button type="button" class="btn btn-outline-warning"><a href="login.html">Return</a></button></div>
+        </div>
+      </div>
+      <div v-if="flagDescription">
+        <br>
+        <p style="font-size: 18px;">
+          {{ movie.overview }}
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+<script>
+  const { createApp } = Vue
+  const app = createApp({
+    data(){
+      return{
+        info: '',
+        movie: 0,
+        flagDescription: false,
+        rate: 0.5,
+      }
+    },
+    methods: {
+      turnOnDescrip(){
+        this.flagDescription = (!this.flagDescription)?true:false
+      },
+      postRating(){
+        const rate = { values: this.rate };
+        axios.post('https://api.themoviedb.org/3/movie/'+ this.movie.id +'/rating?value=rate', rate)
+            .then(function (response){
+
+            });
+      }
+    },
+    mounted(){
+      //var axios = require('axios');
+      var config = {
+        method: 'get',
+        url: 'https://api.themoviedb.org/3/movie/popular?language=en-US',
+        headers: { 
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJlMDM4OGI2NzU3Y2E2MzYzODQ4YWE3YmY1OGEzYzZjYiIsInN1YiI6IjYzMWU2OTBjYzhmM2M0MDA3ZjZjMDFjMCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ._PXoXAgWp43cSCc9cQGfF9SKbk5Wmu5VfvRyVXyPSG0'
+        }
+      };
+      var self = this;
+      axios(config)
+      .then(function (response) {
+        self.info = response.data.results;
+        self.movie = self.info[localStorage.getItem('movie')]
+        console.log(self.movie)
+        //console.log(JSON.stringify(response.data));
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    },
+  }).mount('#contenedor')
+</script>
+</html>
