@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primer archivo Vue.js</title>
+</head>
+<body>
+    <div id="contenedor">
+        <input type="number" v-model="number1">
+        <input type="number" v-model="number2">
+        <button @click="suma">Suma</button>
+        {{ total }}
+        <input type="number" v-model="age">
+        <h1 v-if="age < 18">No puede pasar</h1>
+        <h1 v-else>Puede pasar</h1>
+        <input type="text" v-model="name">
+        <input type="text" v-model="role">
+        <button @click="agregar">Push</button>
+        <ol>
+            <h1>
+                <li v-for="items in chamacos">
+                {{ items.name }} : {{ items.role }}
+                </li>
+            </h1>
+        </ol>
+    </div>
+</body>
+<script src="https://unpkg.com/vue@3"></script>
+<script>
+    const { createApp } = Vue;
+    const app = createApp({
+        data(){
+            return{
+                name: "",
+                role: "",
+                number1: 0,
+                number2: 0,
+                total: 0,
+                age: 0,
+                chamacos: [{name:'asd',role:'asd'}]
+            }
+        },
+        methods: {
+            suma(){
+                this.total = this.number1 + this.number2
+            },
+            agregar(){
+                this.chamacos.push({name:this.name,role:this.role})
+            }
+        }
+    }).mount('#contenedor')
+</script>
+</html>
