@@ -16,122 +16,40 @@
     <title>Page</title>
 </head>
 <body class="vh-100">
-    <!-- NAVBAR -->
-    <?php include "public/templates/navbar.php"?>
     <div class="container-fluid">
-        <div class="row">
-        <?php include "public/templates/sidebar.php"?>        
-            <div class="col-lg-10 col-sm-12">
-               <div class="border-bottom">
-                    <div class="row m-2">
-                        <div class="col ">
-                            <p class="">Products</p>
-                        </div>
-                        <div class="col">
-                        <!-- Modal -->
-                            <div class="modal fade" id="modalAgregar" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                                <div class="modal-dialog">
-                                    <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">@</span>
-                                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">@</span>
-                                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">@</span>
-                                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">@</span>
-                                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">@</span>
-                                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                                    </div>
-                                    <div class="input-group mb-3">
-                                        <span class="input-group-text" id="basic-addon1">@</span>
-                                        <input type="text" class="form-control" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1">
-                                    </div>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
-                                </div>
-                        </div>
+        <div class="row text-center">
+            <form method="POST">
+                <!-- Email input -->
+                <div class="form-outline mb-4">
+                    <input type="email" id="form2Example1" class="form-control" />
+                    <label class="form-label" for="form2Example1">Email address</label>
+                </div>
+
+                <!-- Password input -->
+                <div class="form-outline mb-4">
+                    <input type="password" id="form2Example2" class="form-control" />
+                    <label class="form-label" for="form2Example2">Password</label>
+                </div>
+
+                <!-- 2 column grid layout for inline styling -->
+                <div class="row mb-4">
+                    <div class="col d-flex justify-content-center">
+                    <!-- Checkbox -->
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked />
+                        <label class="form-check-label" for="form2Example31"> Remember me </label>
+                    </div>
+                    </div>
+
+                    <div class="col">
+                    <!-- Simple link -->
+                    <a href="#!">Forgot password?</a>
                     </div>
                 </div>
-            <div class="row">
-                <?php for($i=0; $i<12; $i++ ): ?>
-                    <div class="col-sm-3 col-md-3 mb-5">
-                        <div class="card bg-light " style="width: 20rem;">
-                            <img src="public/img/1601032304304.jpg" class="card-img-top" alt="...">
-                            <div class="card-body">
-                                <h5 class="card-title ">Producto</h5>
-                                <p class="card-text ">Pepe</p>
-                                <div class="row">
-                                    <div class="col">
-                                        <a href="#" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#modalAgregar">Editar</a>
-                                    </div>
 
-                                    <div class="col">
-                                        <a href="#" class="btn btn-danger w-100" onclick="remove(this)">Eliminar</a>
-                                    </div>
-                                    <a href="" class="btn btn-info mt-2">Detalles</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div> 
-                <?php endfor;?>
-            </div>
-        </div>
+                <!-- Submit button -->
+                <button type="button" class="btn btn-primary btn-block mb-4" >Sign in</button>
+        </form>
     </div>
-    <script>
-        function remove(target){
-            const swalWithBootstrapButtons = Swal.mixin({
-                customClass: {
-                    confirmButton: 'btn btn-success',
-                    cancelButton: 'btn btn-danger'
-                },
-                buttonsStyling: false
-                })
-
-                swalWithBootstrapButtons.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
-                cancelButtonText: 'No, cancel!',
-                reverseButtons: true
-                }).then((result) => {
-                if (result.isConfirmed) {
-                    swalWithBootstrapButtons.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                    )
-                } else if (
-                    /* Read more about handling dismissals below */
-                    result.dismiss === Swal.DismissReason.cancel
-                ) {
-                    swalWithBootstrapButtons.fire(
-                    'Cancelled',
-                    'Your imaginary file is safe :)',
-                    'error'
-                    )
-                }
-                })
-        }
-    </script>  
 </body>
 </html>
