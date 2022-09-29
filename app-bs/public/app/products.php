@@ -1,3 +1,6 @@
+<?php
+    session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,23 +33,44 @@
                         </div>
                         <div class="col">
                                 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                                    Launch demo modal
+                                    New Product
                                 </button>
                             <!-- Modal -->
                             <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLabel">New Product</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
                                     <div class="modal-body">
-                                        ...
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                        <button type="button" class="btn btn-primary">Save changes</button>
-                                    </div>
+                                        <form method="POST" action="ProductController.php">
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Name product:</label>
+                                                <input type="text" class="form-control" id="recipient-name" name="name">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Product slug:</label>
+                                                <input type="text" class="form-control" id="recipient-name" name="slug">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Description:</label>
+                                                <input type="text" class="form-control" id="recipient-name" name="description">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Product brand_id:</label>
+                                                <input type="text" class="form-control" id="recipient-name" name="brand_id">
+                                            </div>
+                                            <!-- <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Product slug:</label>
+                                                <input type="text" class="form-control" id="recipient-name" name="slug">
+                                            </div> -->
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
+                                                <button type="button" class="btn btn-primary" type="submit">Save changes</button>
+                                            </div>
+                                            <input type="hidden" name="create">
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -55,7 +79,7 @@
                 </div>
             <div class="row">
             <?php
-                include "productsController.php";
+                include "ProductController.php";
                 $producto = new Productos();
                 $productos = $producto -> producto();
             ?>
