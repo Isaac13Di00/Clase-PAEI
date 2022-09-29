@@ -54,12 +54,17 @@
                     </div>
                 </div>
             <div class="row">
-                <?php for($i=0; $i<12; $i++ ): ?>
+            <?php
+                include "productsController.php";
+                $producto = new Productos();
+                $productos = $producto -> producto();
+            ?>
+                <?php for($i = 0; $i < sizeof($productos); $i++): ?>
                     <div class="col-sm-3 col-md-3 mb-5">
                         <div class="card bg-light " style="width: 20rem;">
-                            <img src="../img/1601032304304.jpg" class="card-img-top" alt="...">
+                            <img src="<?php echo $productos[$i]['cover'];?>" class="card-img-top" alt="...">
                             <div class="card-body">
-                                <h5 class="card-title ">Producto</h5>
+                                <h5 class="card-title "><?php echo $productos[$i]['name'];?></h5>
                                 <p class="card-text ">Pepe</p>
                                 <div class="row">
                                     <div class="col">
@@ -78,8 +83,7 @@
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8" crossorigin="anonymous"></script>    <script>
        
         function remove(target){
             const swalWithBootstrapButtons = Swal.mixin({
