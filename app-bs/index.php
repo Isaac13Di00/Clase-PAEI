@@ -8,7 +8,6 @@
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="sweetalert2.min.css">
-    <script></script>
     <style type="text/css">
         aside{
             height: 90vh;
@@ -16,11 +15,11 @@
     </style>
     <title>Page</title>
 </head>
-<body class="">
+<body>
     <div class="position-absolute top-50 start-50 translate-middle">
         <div class="container-fluid">
             <div class="row">
-            <form method="POST" action="public/app/authController.php">
+            <form method="POST" action="app/AuthController.php">
                 <!-- Email input -->
                 <div class="form-outline mb-4">
                     <input type="email" id="form2Example1" class="form-control" name="email" />
@@ -45,6 +44,7 @@
                 </div>
                 <!-- Submit button -->
                 <button type="submit" class="btn btn-primary btn-block mb-4" name="login">Sign in</button>
+                <input type="hidden" value="access" name="action">
             </form>
         </div>
     </div>

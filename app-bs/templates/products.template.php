@@ -1,6 +1,6 @@
 <div class="col-sm-3 col-md-3 mb-5">
     <div class="card bg-light " style="width: 20rem;">
-        <img src="public/img/1601032304304.jpg" class="card-img-top" alt="...">
+        <img src="../public/img/1601032304304.jpg" class="card-img-top" alt="...">
         <div class="card-body">
             <h5 class="card-title ">Producto</h5>
             <p class="card-text ">Pepe</p>
