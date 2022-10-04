@@ -3,14 +3,17 @@ if (isset($_POST['action'])) {
   switch ($_POST['action']){
     case 'create':
       session_start();
-    $producto = new Productos();
-    $_SESSION['name-product'] = $_POST['name'];
-    $_SESSION['slug-product'] = $_POST['slug'];
-    $_SESSION['description-product'] = $_POST['description'];
-    $_SESSION['features-product'] = $_POST['features'];
-    $_SESSION['brand_id-product'] = $_POST['brand_id'];
-    $_SESSION['cover-product'] = $producto->confImage();
-    $producto->createProduct();
+      $producto = new Productos();
+      $_SESSION['name-product'] = $_POST['name'];
+      $_SESSION['slug-product'] = $_POST['slug'];
+      $_SESSION['description-product'] = $_POST['description'];
+      $_SESSION['features-product'] = $_POST['features'];
+      $_SESSION['brand_id-product'] = $_POST['brand_id'];
+      $_SESSION['cover-product'] = $producto->confImage();
+      $producto->createProduct();
+    break;
+    case 'update':
+      echo "";
     break;
  }
 }

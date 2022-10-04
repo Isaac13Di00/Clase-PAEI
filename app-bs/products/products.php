@@ -1,8 +1,11 @@
 <?php
     session_start();
     include "../app/ProductController.php";
+    include "../app/BrandController.php";
     $productController = new Productos();
     $products = $productController->getProducts();
+    $brand = new Brand();
+    $brands = $brand->getBrands();
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -66,7 +69,15 @@
                                             </div>
                                             <div class="form-group">
                                                 <label for="recipient-name" class="col-form-label">Product brand_id:</label>
-                                                <input type="text" class="form-control" id="recipient-name" name="brand_id">
+                                                <select name="brand_id" class="form-control">
+                                                    <?php if (isset($brands) && count($brands)):?>
+                                                        <?php foreach ($brands as $bra):?>
+                                                            <option value="<?=$bra->id?>">
+                                                                <?= $bra->name ?>
+                                                            </option>
+                                                        <?php endforeach?>
+                                                    <?php endif?>
+                                                </select>
                                             </div>
                                             <div class="form-group">
                                                 <label for="recipient-name" class="col-form-label">Cover:</label>
@@ -76,7 +87,7 @@
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
                                                 <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" type="submit">Save changes</button>
                                             </div>
-                                            <input type="hidden" name="action" value="create">
+                                            <input type="hidden" id="action" name="action" value="create">
                                         </form>
                                     </div>
                                 </div>
@@ -95,7 +106,7 @@
                             <p class="card-text text-center"><?= isset($product->brand->name)?$product->brand->name:'No brand';?></p>
                             <div class="row">
                                 <div class="col">
-                                    <a href="#" class="btn btn-warning w-100" data-bs-toggle="modal" data-bs-target="#modalAgregar">Editar</a>
+                                    <a href="#" class="btn btn-warning w-100" id="btn" onclick="edit(this)"data-bs-toggle="modal" data-product="<?=$product?>" data-bs-target="#exampleModal">Editar</a>
                                 </div>
 
                                 <div class="col">
@@ -148,6 +159,12 @@
                     )
                 }
             })
+        }
+        function edit(target){
+            document.getElementById("action").value = 'update';
+            let product = document.getElementById("btn");
+            // console.log(product);
+
         }
     </script>  
 </body>
