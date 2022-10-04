@@ -47,7 +47,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                     <div class="modal-body">
-                                        <form method="POST" action="ProductController.php">
+                                        <form method="POST" action="../app/ProductController.php" enctype="multipart/form-data">
                                             <div class="form-group">
                                                 <label for="recipient-name" class="col-form-label">Name product:</label>
                                                 <input type="text" class="form-control" id="recipient-name" name="name">
@@ -61,16 +61,20 @@
                                                 <input type="text" class="form-control" id="recipient-name" name="description">
                                             </div>
                                             <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Features::</label>
+                                                <input type="text" class="form-control" id="recipient-name" name="features">
+                                            </div>
+                                            <div class="form-group">
                                                 <label for="recipient-name" class="col-form-label">Product brand_id:</label>
                                                 <input type="text" class="form-control" id="recipient-name" name="brand_id">
                                             </div>
-                                            <!-- <div class="form-group">
-                                                <label for="recipient-name" class="col-form-label">Product slug:</label>
-                                                <input type="text" class="form-control" id="recipient-name" name="slug">
-                                            </div> -->
+                                            <div class="form-group">
+                                                <label for="recipient-name" class="col-form-label">Cover:</label>
+                                                <input type="file" class="form-control" id="recipient-name" name="cover">
+                                            </div>
                                             <div class="modal-footer">
                                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" >Close</button>
-                                                <button type="button" class="btn btn-primary" type="submit">Save changes</button>
+                                                <button type="submit" class="btn btn-primary" data-bs-dismiss="modal" type="submit">Save changes</button>
                                             </div>
                                             <input type="hidden" name="action" value="create">
                                         </form>

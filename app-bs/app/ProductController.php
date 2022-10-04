@@ -1,8 +1,16 @@
 <?php
 if (isset($_POST['action'])) {
- switch ($_POST['action']){
-  case 'create':
-    echo "sex";
+  switch ($_POST['action']){
+    case 'create':
+      session_start();
+    $producto = new Productos();
+    $_SESSION['name-product'] = $_POST['name'];
+    $_SESSION['slug-product'] = $_POST['slug'];
+    $_SESSION['description-product'] = $_POST['description'];
+    $_SESSION['features-product'] = $_POST['features'];
+    $_SESSION['brand_id-product'] = $_POST['brand_id'];
+    $_SESSION['cover-product'] = $producto->confImage();
+    $producto->createProduct();
     break;
  }
 }
@@ -42,14 +50,32 @@ Class Productos{
       CURLOPT_FOLLOWLOCATION => true,
       CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
       CURLOPT_CUSTOMREQUEST => 'POST',
-      CURLOPT_POSTFIELDS => array('name' => 'playear azul','slug' => 'playera-azul-21-forever-3','description' => 'hermosa playera de color azul de la marca 21 forever','features' => 'La lavadora cuenta con capacidad de lavado de 18 kg, diseño exterior de color gris, su funcionamiento integra tecnología air bubble 4d, sistema de lavado por pulsador, 5 ciclos de lavado mas ciclo ariel , tina de acero inoxidable, 9 niveles de agua y 3 niveles de temperatura. Ofrece llenado con cascada de agua waterrfall, timer para inicio retardado y manija de apertura ez soft','brand_id' => '1','cover'=> new CURLFILE('/C:/Users/jsoto/Downloads/00750101111561L.webp')),
+      CURLOPT_POSTFIELDS => array(
+        'name' => $_SESSION['name-product'],
+        'slug' => $_SESSION['slug-product'],
+        'description' => $_SESSION['description-product'],
+        'features' => $_SESSION['features-product'],
+        'brand_id' => $_POST['brand_id'],
+        'cover'=> new CURLFILE($_SESSION['cover-product'])),
       CURLOPT_HTTPHEADER => array(
-        'Authorization: Bearer '. $_SESSION['token']
+        'Authorization: Bearer ' . $_SESSION['token']
       ),
     ));
-    $response = curl_exec($curl);
+
+    $response = json_decode(curl_exec($curl));
     curl_close($curl);
-    echo $response;
+    if (isset($response->code) && $response->code > 0) {
+      header("Location: ../products/products.php");
+    }else{
+      header("Location: ../products/products.php?error=true");
+      
+    }
+
+  }
+  public function confImage(){
+    $target_path  = '../public/upload_img/' . basename( $_FILES['cover']['name']); 
+    move_uploaded_file($_FILES['cover']['tmp_name'], $target_path);
+    return $target_path;
   }
 }
 ?>
